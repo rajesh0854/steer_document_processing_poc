@@ -1,0 +1,21 @@
+{
+  "id": "b870411c-8a4c-4fb9-9e3b-a1e672d35f79",
+  "session_id": "8a7222b2-ceb2-407b-846b-ca88d488e3fd",
+  "schema_id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "schema_name": "test",
+  "results": [
+    {
+      "filename": "TSE_enquiry_Ningbo_Licheng_Mega50.pdf",
+      "data": {
+        "is raw water avilable": "Yes",
+        "Altude": "50",
+        "is cooling water available": "Yes",
+        "is water bath not enabled": null,
+        "is screen changer diabled": null
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-05T06:06:52.031579"
+}

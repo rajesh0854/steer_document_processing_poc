@@ -1,0 +1,23 @@
+{
+  "id": "03e74d85-c8a7-4f8b-b058-20637c9cc8b9",
+  "session_id": "b4fb3a5e-2f66-4cb5-92cf-a419590cefae",
+  "schema_id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "schema_name": "Application details",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "industrial application": "true",
+        "end product usage": "Extrusion",
+        "end product form": "Sheet",
+        "bench mark": "Yes",
+        "end product test method": "ASTM",
+        "lab trial": "Yes",
+        "willing to send sample": "Yes"
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-05T07:23:29.739092"
+}

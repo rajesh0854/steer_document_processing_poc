@@ -1,0 +1,24 @@
+{
+  "id": "e7c62bc9-aae1-4aa5-bdeb-35b00aadf9f0",
+  "session_id": "5fe72c00-0eea-4a8d-8ae9-cac22425ffd0",
+  "schema_id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "schema_name": "Application details",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "industrial application": null,
+        "end product usage": null,
+        "end product form": null,
+        "bench mark": null,
+        "end product test method": null,
+        "lab trial": null,
+        "willing to send sample": null,
+        "lab trial location": null
+      },
+      "status": "error",
+      "error": "'\\n  \"industrial_application\"'"
+    }
+  ],
+  "processed_at": "2025-06-05T10:52:30.083736"
+}

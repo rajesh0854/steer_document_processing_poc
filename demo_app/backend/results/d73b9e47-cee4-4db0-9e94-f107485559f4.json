@@ -1,0 +1,20 @@
+{
+  "id": "d73b9e47-cee4-4db0-9e94-f107485559f4",
+  "session_id": "4544ad24-5dfc-4bc8-82f5-76a704a3c4c9",
+  "schema_id": "a3ad8801-39e7-4474-a6f4-bba3c1b1a010",
+  "schema_name": "test2",
+  "results": [
+    {
+      "filename": "TSE_Enquiry_form.pdf",
+      "data": {
+        "home appliance": null,
+        "automative": null,
+        "bench mark": "Yes",
+        "lab trial": "No"
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-04T17:42:28.919589"
+}

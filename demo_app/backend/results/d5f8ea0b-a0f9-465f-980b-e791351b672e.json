@@ -1,0 +1,21 @@
+{
+  "id": "d5f8ea0b-a0f9-465f-980b-e791351b672e",
+  "session_id": "bc47211c-a06b-46aa-816e-c4179cd04f97",
+  "schema_id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "schema_name": "test",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "is raw water avilable": "Yes",
+        "Altude": null,
+        "is cooling water available": "Yes",
+        "is water bath not enabled": null,
+        "is screen changer diabled": null
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-04T17:17:55.979344"
+}

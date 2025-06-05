@@ -1,0 +1,57 @@
+{
+  "id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "name": "Application details",
+  "description": "",
+  "fields": [
+    {
+      "description": "is it industrial application (yes/no)",
+      "name": "industrial application",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "",
+      "name": "end product usage",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "",
+      "name": "end product form",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "available or not available",
+      "name": "bench mark",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "",
+      "name": "end product test method",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "is lab trial required",
+      "name": "lab trial",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "description": "",
+      "name": "willing to send sample",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "name": "lab trial location",
+      "type": "text",
+      "description": "location for the lab trial",
+      "required": false
+    }
+  ],
+  "created_at": "2025-06-04T17:16:39.837959",
+  "updated_at": "2025-06-05T07:28:37.371814"
+}
