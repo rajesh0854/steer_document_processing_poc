@@ -1,0 +1,24 @@
+{
+  "id": "a6773ae4-7426-42c2-989b-286118e78242",
+  "session_id": "1f2b2dcc-be85-4d8a-afed-5003f7635c7a",
+  "schema_id": "ba5e903c-22f1-4f8d-a139-97a4c6ab3c12",
+  "schema_name": "TSE-Check-List",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "client name": "Gulf Additives LLC",
+        "city": "Rusayd",
+        "pincode": "117",
+        "email": "sushilkumarb@otegroup.com",
+        "cooling water": "Yes",
+        "pneumac air": "Yes",
+        "ip protecon": "Standard IP55",
+        "scope of supply and work": null
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-11T05:05:05.966810"
+}

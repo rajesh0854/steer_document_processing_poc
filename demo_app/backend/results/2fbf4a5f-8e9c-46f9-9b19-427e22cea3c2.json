@@ -1,0 +1,22 @@
+{
+  "id": "2fbf4a5f-8e9c-46f9-9b19-427e22cea3c2",
+  "session_id": "25c079b8-b646-4a9c-841d-0eed2ad94349",
+  "schema_id": "35a299fa-d30a-452c-8fa5-ee188e353525",
+  "schema_name": "test",
+  "results": [
+    {
+      "filename": "B_-_083_05.05.2025.pdf",
+      "data": {
+        "quotation number": "B-083",
+        "gstin": "29AAAFF8648M1ZS",
+        "goods description": "3/4\" Silicon Hose With SS Coild With\nTextile Braiding 3/4\" TC 45' Bend X\n1\" TC 90' Bend tentative- 400mm\nSilicon Hose SS304 FTG",
+        "total amount": "4,519.00",
+        "validity": "2 WEEKS",
+        "delivery": "3-4 WEEKS"
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-11T04:58:12.610829"
+}

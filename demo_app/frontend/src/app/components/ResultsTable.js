@@ -116,9 +116,26 @@ export default function ResultsTable({ results, onExport, processing }) {
 
   const getAllFields = () => {
     const fields = new Set();
+    if (!editableResults || editableResults.length === 0) {
+      return [];
+    }
+    
     editableResults.forEach(result => {
-      if (result.data) {
-        Object.keys(result.data).forEach(key => fields.add(key));
+      if (result?.data) {
+        // First add all non-array fields
+        Object.entries(result.data).forEach(([key, value]) => {
+          if (!Array.isArray(value)) {
+            fields.add(key);
+          }
+        });
+
+        // Then handle formulation data
+        Object.entries(result.data).forEach(([formulaName, formulaData]) => {
+          if (Array.isArray(formulaData) && formulaData.length > 0) {
+            // Add formulation name as a section header
+            fields.add(formulaName);
+          }
+        });
       }
     });
     return Array.from(fields);
@@ -131,6 +148,192 @@ export default function ResultsTable({ results, onExport, processing }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const renderValue = (value) => {
+    if (value === null || value === undefined) {
+      return <Typography color="text.secondary" variant="body2">-</Typography>;
+    }
+    
+    if (Array.isArray(value)) {
+      return (
+        <Box>
+          {value.map((item, index) => (
+            <Box key={index} sx={{ mb: 1 }}>
+              {typeof item === 'object' ? (
+                Object.entries(item).map(([key, val]) => (
+                  <Typography key={key} variant="body2" sx={{ mb: 0.5 }}>
+                    <strong>{key}:</strong> {typeof val === 'object' ? JSON.stringify(val) : val || '-'}
+                  </Typography>
+                ))
+              ) : (
+                <Typography variant="body2">{String(item)}</Typography>
+              )}
+            </Box>
+          ))}
+        </Box>
+      );
+    }
+    
+    if (typeof value === 'object' && value !== null) {
+      if (value.hasOwnProperty('Max') || value.hasOwnProperty('Min')) {
+        return (
+          <Typography variant="body2">
+            {Object.entries(value).map(([key, val]) => `${key}: ${val}`).join(', ')}
+          </Typography>
+        );
+      }
+      return (
+        <Box>
+          {Object.entries(value).map(([key, val]) => (
+            <Box key={key} sx={{ mb: 1 }}>
+              <Typography variant="subtitle2" color="primary" gutterBottom>
+                {key}
+              </Typography>
+              {Array.isArray(val) ? (
+                val.map((item, idx) => (
+                  <Box key={idx} sx={{ ml: 2, mb: 1, p: 1, bgcolor: 'grey.50', borderRadius: 1 }}>
+                    {Object.entries(item || {}).map(([itemKey, itemVal]) => (
+                      <Typography key={itemKey} variant="body2" sx={{ mb: 0.5 }}>
+                        <strong>{itemKey}:</strong> {typeof itemVal === 'object' ? JSON.stringify(itemVal) : itemVal || '-'}
+                      </Typography>
+                    ))}
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2">{typeof val === 'object' ? JSON.stringify(val) : val || '-'}</Typography>
+              )}
+            </Box>
+          ))}
+        </Box>
+      );
+    }
+    
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    
+    if (typeof value === 'object' && value.error) {
+      return (
+        <Alert severity="error" sx={{ mt: 1 }}>
+          {value.error}
+          {value.details && (
+            <Typography variant="caption" display="block">
+              {value.details}
+            </Typography>
+          )}
+        </Alert>
+      );
+    }
+    
+    return String(value);
+  };
+
+  const renderTableCell = (result, fieldName, documentIndex) => {
+    if (!result?.data) {
+      return (
+        <TableCell>
+          <Typography variant="body2" color="text.secondary">-</Typography>
+        </TableCell>
+      );
+    }
+
+    const isEditing = editingCell?.documentIndex === documentIndex && editingCell?.fieldName === fieldName;
+    const value = result.data[fieldName];
+    
+    // If this is a formulation field (contains array data)
+    if (Array.isArray(value)) {
+      return (
+        <TableCell 
+          colSpan={paginatedResults.length} 
+          sx={{ 
+            bgcolor: 'primary.light',
+            color: 'white',
+            fontWeight: 'bold'
+          }}
+        >
+          <Typography variant="subtitle2">
+            {fieldName}
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {Object.keys(value[0] || {}).map((header) => (
+                    <TableCell 
+                      key={header}
+                      sx={{ 
+                        color: 'white',
+                        fontWeight: 'bold',
+                        borderBottom: '1px solid rgba(255,255,255,0.2)'
+                      }}
+                    >
+                      {header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {value.map((row, rowIndex) => (
+                  <TableRow key={rowIndex}>
+                    {Object.entries(row || {}).map(([key, cellValue], cellIndex) => (
+                      <TableCell 
+                        key={`${rowIndex}-${cellIndex}`}
+                        sx={{ 
+                          color: 'white',
+                          borderBottom: '1px solid rgba(255,255,255,0.2)'
+                        }}
+                      >
+                        {typeof cellValue === 'object' ? JSON.stringify(cellValue) : cellValue || '-'}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </TableCell>
+      );
+    }
+
+    if (isEditing) {
+      return (
+        <TableCell>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <TextField
+              size="small"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              autoFocus
+              fullWidth
+              variant="outlined"
+            />
+            <IconButton size="small" onClick={handleEditSave} color="primary">
+              <Save fontSize="small" />
+            </IconButton>
+            <IconButton size="small" onClick={handleEditCancel}>
+              <Cancel fontSize="small" />
+            </IconButton>
+          </Box>
+        </TableCell>
+      );
+    }
+
+    return (
+      <TableCell>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Typography variant="body2" sx={{ mr: 1 }}>
+            {typeof value === 'object' ? renderValue(value) : value || '-'}
+          </Typography>
+          <IconButton
+            size="small"
+            onClick={() => handleEditStart(documentIndex, fieldName, value)}
+          >
+            <Edit fontSize="small" />
+          </IconButton>
+        </Box>
+      </TableCell>
+    );
   };
 
   if (!results || results.length === 0) {
@@ -155,152 +358,107 @@ export default function ResultsTable({ results, onExport, processing }) {
     page * rowsPerPage + rowsPerPage
   );
 
-  const renderTableView = () => (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <Table stickyHeader size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', bgcolor: 'grey.100', minWidth: 150 }}>
-                Field Name
-              </TableCell>
-              {paginatedResults.map((result, index) => (
-                <TableCell 
-                  key={index} 
-                  sx={{ 
-                    fontWeight: 'bold', 
-                    bgcolor: 'grey.100',
-                    minWidth: 200,
-                    maxWidth: 250,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CheckCircle color="success" sx={{ mr: 1, fontSize: 16 }} />
-                      <Typography variant="body2" noWrap title={result.filename}>
-                        {result.filename.length > 20 
-                          ? `${result.filename.substring(0, 20)}...` 
-                          : result.filename
-                        }
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <IconButton
-                        size="small"
-                        onClick={() => toggleRawData(page * rowsPerPage + index)}
-                        title="View Raw Data"
-                      >
-                        <Code fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => toggleRowExpansion(page * rowsPerPage + index)}
-                        title="View Details"
-                      >
-                        {expandedRows.has(page * rowsPerPage + index) ? 
-                          <ExpandLess fontSize="small" /> : 
-                          <ExpandMore fontSize="small" />
-                        }
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allFields.map((field) => (
-              <TableRow key={field} hover>
-                <TableCell 
-                  sx={{ 
-                    fontWeight: 'bold', 
-                    bgcolor: 'grey.50',
-                    borderRight: 1,
-                    borderColor: 'grey.200'
-                  }}
-                >
-                  <Typography variant="body2">
-                    {field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Typography>
-                </TableCell>
-                {paginatedResults.map((result, docIndex) => {
-                  const actualDocIndex = page * rowsPerPage + docIndex;
-                  const isEditing = editingCell?.documentIndex === actualDocIndex && 
-                                   editingCell?.fieldName === field;
-                  const value = result.data?.[field] || '';
+  const renderTableView = () => {
+    if (!paginatedResults || paginatedResults.length === 0) {
+      return (
+        <Paper sx={{ p: 3, textAlign: 'center' }}>
+          <Typography variant="body1" color="text.secondary">
+            No results to display in this page.
+          </Typography>
+        </Paper>
+      );
+    }
 
-                  return (
-                    <TableCell key={docIndex}>
-                      {isEditing ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <TextField
-                            size="small"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            onKeyPress={(e) => {
-                              if (e.key === 'Enter') handleEditSave();
-                              if (e.key === 'Escape') handleEditCancel();
-                            }}
-                            autoFocus
-                            fullWidth
-                            variant="outlined"
-                          />
-                          <IconButton size="small" onClick={handleEditSave}>
-                            <Save fontSize="small" />
-                          </IconButton>
-                          <IconButton size="small" onClick={handleEditCancel}>
-                            <Cancel fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      ) : (
-                        <Box
-                          sx={{
-                            cursor: 'pointer',
-                            p: 1,
-                            borderRadius: 1,
-                            '&:hover': { bgcolor: 'grey.100' },
-                            minHeight: 32,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                          }}
-                          onClick={() => handleEditStart(actualDocIndex, field, value)}
+    return (
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 600 }}>
+          <Table stickyHeader size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    bgcolor: 'grey.100', 
+                    width: '200px',
+                    position: 'sticky',
+                    left: 0,
+                    zIndex: 2
+                  }}
+                >
+                  Field Name
+                </TableCell>
+                {paginatedResults.map((result, index) => (
+                  <TableCell 
+                    key={index} 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      bgcolor: 'grey.100',
+                      minWidth: '250px'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CheckCircle color="success" sx={{ mr: 1, fontSize: 16 }} />
+                        <Typography variant="body2" noWrap title={result.filename}>
+                          {result.filename?.length > 20 
+                            ? `${result.filename.substring(0, 20)}...` 
+                            : result.filename || 'Untitled'
+                          }
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <IconButton
+                          size="small"
+                          onClick={() => toggleRawData(page * rowsPerPage + index)}
+                          title="View Raw Data"
                         >
-                          {value ? (
-                            <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                              {String(value)}
-                            </Typography>
-                          ) : (
-                            <Typography variant="body2" color="text.secondary" fontStyle="italic">
-                              Click to add
-                            </Typography>
-                          )}
-                          <Edit sx={{ fontSize: 12, opacity: 0.5, ml: 1 }} />
-                        </Box>
-                      )}
-                    </TableCell>
-                  );
-                })}
+                          <Code fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {getAllFields().map((field) => (
+                <TableRow key={field}>
+                  <TableCell 
+                    sx={{ 
+                      fontWeight: 'bold',
+                      bgcolor: 'grey.50',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 1
+                    }}
+                  >
+                    {field}
+                  </TableCell>
+                  {paginatedResults.map((result, docIndex) => {
+                    const actualDocIndex = page * rowsPerPage + docIndex;
+                    return renderTableCell(result, field, actualDocIndex);
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      {/* Pagination */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <TablePagination
-          rowsPerPageOptions={[3, 5, 10]}
-          component="div"
-          count={successfulResults.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
-    </Paper>
-  );
+        {/* Pagination */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <TablePagination
+            rowsPerPageOptions={[3, 5, 10]}
+            component="div"
+            count={successfulResults.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      </Paper>
+    );
+  };
 
   const renderCardView = () => (
     <Box>

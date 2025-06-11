@@ -1,0 +1,26 @@
+{
+  "id": "c473ce58-af77-4171-a1ae-5a81b26081ce",
+  "session_id": "87bea5d1-9e48-4dbb-a657-9c99ff37a543",
+  "schema_id": "f43bcc06-e099-455f-a82b-1dcca0ff088c",
+  "schema_name": "Site Informaon",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "ambient temperature at site": {
+          "min_temp": "25",
+          "max_temp": "45"
+        },
+        "3 phase, 1 neutral": "Yes",
+        "cooling water available": "Yes",
+        "pneumac air available": "Yes",
+        "place of machine installaon": "Non hazardous",
+        "please specify ip protecon required": "Standard IP55",
+        "extruder supplier scope": null
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-10T13:12:00.657594"
+}

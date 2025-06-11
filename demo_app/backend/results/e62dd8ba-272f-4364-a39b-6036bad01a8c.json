@@ -1,0 +1,24 @@
+{
+  "id": "e62dd8ba-272f-4364-a39b-6036bad01a8c",
+  "session_id": "87bea5d1-9e48-4dbb-a657-9c99ff37a543",
+  "schema_id": "1fa26eab-b628-452f-85ae-1364fcb1ec06",
+  "schema_name": "Application details",
+  "results": [
+    {
+      "filename": "Enquiry_form_-_Gulf_Additives_Revised_11112024.pdf",
+      "data": {
+        "industrial_application": "Industrial application",
+        "end_product_usage": "Extrusion",
+        "end_product_form": "Granules",
+        "bench_mark": "Yes",
+        "end_product_test_method": "ISO",
+        "lab_trial": "Yes",
+        "willing_to_send_sample": "Yes",
+        "lab_trial_location": "STEER India"
+      },
+      "status": "success",
+      "error": null
+    }
+  ],
+  "processed_at": "2025-06-10T13:12:43.398565"
+}

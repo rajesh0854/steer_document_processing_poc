@@ -1,0 +1,21 @@
+{
+  "id": "e4d93414-c2fe-4cc9-95a1-fa82199d5236",
+  "session_id": "57741f4e-eb27-4d40-923a-41b047fe05ed",
+  "schema_id": "619cbbac-10e3-4c10-87fa-96ab45de94e5",
+  "schema_name": "test",
+  "results": [
+    {
+      "filename": "B_-_083_05.05.2025.pdf",
+      "data": {
+        "quotation number": null,
+        "goods description": null,
+        "total amount": null,
+        "validity": null,
+        "delivery": null
+      },
+      "status": "error",
+      "error": "'\\n  \"industrial_application\"'"
+    }
+  ],
+  "processed_at": "2025-06-11T04:50:47.829517"
+}

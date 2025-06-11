@@ -1,0 +1,21 @@
+{
+  "id": "45a285bc-d1ac-410c-bf01-b7aa16e92ec6",
+  "session_id": "57741f4e-eb27-4d40-923a-41b047fe05ed",
+  "schema_id": "619cbbac-10e3-4c10-87fa-96ab45de94e5",
+  "schema_name": "test",
+  "results": [
+    {
+      "filename": "B_-_083_05.05.2025.pdf",
+      "data": {
+        "quotation number": null,
+        "goods description": null,
+        "total amount": null,
+        "validity": null,
+        "delivery": null
+      },
+      "status": "error",
+      "error": "Failed to upload file to Gemini: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=SECRET returned \"API key not valid. Please pass a valid API key.\". Details: \"[{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': {'service': 'generativelanguage.googleapis.com'}}, {'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'}]\">"
+    }
+  ],
+  "processed_at": "2025-06-11T04:49:20.739920"
+}
