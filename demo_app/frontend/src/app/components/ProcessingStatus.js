@@ -91,12 +91,19 @@ export default function ProcessingStatus({
   if (processing) {
     return (
       <Box>
-        <Typography variant="h5" gutterBottom align="center">
+        <Typography variant="h5" gutterBottom align="center" sx={{ mb: 3 }}>
           Processing Documents
         </Typography>
         
-        <Card sx={{ mb: 3, overflow: 'hidden', position: 'relative' }}>
-          {/* Animated Background */}
+        <Card sx={{ 
+          mb: 2, 
+          overflow: 'hidden', 
+          position: 'relative',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          minHeight: 300
+        }}>
+          {/* Animated Background Particles */}
           <Box
             sx={{
               position: 'absolute',
@@ -104,154 +111,282 @@ export default function ProcessingStatus({
               left: 0,
               right: 0,
               bottom: 0,
-              background: `linear-gradient(45deg, 
-                rgba(25, 118, 210, 0.05) 0%, 
-                rgba(25, 118, 210, 0.1) 50%, 
-                rgba(25, 118, 210, 0.05) 100%)`,
-              animation: 'shimmer 3s ease-in-out infinite',
-              '@keyframes shimmer': {
-                '0%': { transform: 'translateX(-100%)' },
-                '100%': { transform: 'translateX(100%)' },
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `
+                  radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%)
+                `,
+                animation: 'float 6s ease-in-out infinite',
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `
+                  radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 40%, rgba(120, 119, 198, 0.25) 0%, transparent 50%)
+                `,
+                animation: 'float 8s ease-in-out infinite reverse',
+              },
+              '@keyframes float': {
+                '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                '33%': { transform: 'translateY(-10px) rotate(1deg)' },
+                '66%': { transform: 'translateY(5px) rotate(-1deg)' },
               },
             }}
           />
           
-          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1, p: 4 }}>
             <Box sx={{ textAlign: 'center', mb: 3 }}>
-              {/* Main Processing Icon with Rotation */}
-              <Zoom in={true} timeout={1000}>
-                <Box sx={{ position: 'relative', display: 'inline-block' }}>
-                  <CircularProgress
-                    size={80}
-                    thickness={2}
-                    sx={{
-                      color: 'primary.main',
-                      animation: 'spin 2s linear infinite',
-                      '@keyframes spin': {
-                        '0%': { transform: 'rotate(0deg)' },
-                        '100%': { transform: 'rotate(360deg)' },
+              {/* Multi-layered Processing Animation */}
+              <Box sx={{ position: 'relative', display: 'inline-block', mb: 2 }}>
+                {/* Outer rotating ring */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: -15,
+                    left: -15,
+                    width: 90,
+                    height: 90,
+                    border: '2px solid rgba(255, 255, 255, 0.3)',
+                    borderRadius: '50%',
+                    borderTopColor: 'rgba(255, 255, 255, 0.8)',
+                    animation: 'spin 3s linear infinite',
+                    '@keyframes spin': {
+                      '0%': { transform: 'rotate(0deg)' },
+                      '100%': { transform: 'rotate(360deg)' },
+                    },
+                  }}
+                />
+                
+                {/* Middle pulsing ring */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: -8,
+                    left: -8,
+                    width: 76,
+                    height: 76,
+                    border: '3px solid rgba(255, 255, 255, 0.4)',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s ease-in-out infinite',
+                    '@keyframes pulse': {
+                      '0%, 100%': { 
+                        transform: 'scale(1)',
+                        borderColor: 'rgba(255, 255, 255, 0.4)'
                       },
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      animation: 'pulse 2s ease-in-out infinite',
-                      '@keyframes pulse': {
-                        '0%, 100%': { transform: 'translate(-50%, -50%) scale(1)' },
-                        '50%': { transform: 'translate(-50%, -50%) scale(1.1)' },
+                      '50%': { 
+                        transform: 'scale(1.1)',
+                        borderColor: 'rgba(255, 255, 255, 0.8)'
                       },
-                    }}
-                  >
-                    {processingSteps[processingStep]?.icon}
-                  </Box>
+                    },
+                  }}
+                />
+                
+                {/* Inner spinning progress */}
+                <CircularProgress
+                  size={60}
+                  thickness={4}
+                  sx={{
+                    color: 'white',
+                    animation: 'spin 1.5s linear infinite',
+                    filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))',
+                  }}
+                />
+                
+                {/* Center icon with glow effect */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    animation: 'glow 2s ease-in-out infinite',
+                    filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))',
+                    '@keyframes glow': {
+                      '0%, 100%': { 
+                        transform: 'translate(-50%, -50%) scale(1)',
+                        filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))'
+                      },
+                      '50%': { 
+                        transform: 'translate(-50%, -50%) scale(1.2)',
+                        filter: 'drop-shadow(0 0 15px rgba(255, 255, 255, 1))'
+                      },
+                    },
+                  }}
+                >
+                  {processingSteps[processingStep]?.icon}
                 </Box>
-              </Zoom>
+              </Box>
               
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                AI is extracting data from your documents
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                AI Processing in Progress
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                This may take a few minutes depending on document complexity
+              <Typography variant="body1" sx={{ opacity: 0.9, mb: 2 }}>
+                Advanced algorithms are extracting structured data from your documents
               </Typography>
             </Box>
 
-            {/* Current Step Display */}
+            {/* Enhanced Step Display */}
             <Fade in={true} timeout={500} key={processingStep}>
               <Box sx={{ mb: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                  <Box sx={{ mr: 2, color: 'primary.main' }}>
+                <Box sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  mb: 2,
+                  p: 2,
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: 2,
+                  backdropFilter: 'blur(10px)',
+                }}>
+                  <Box sx={{ 
+                    mr: 2, 
+                    p: 1,
+                    bgcolor: 'rgba(255, 255, 255, 0.2)',
+                    borderRadius: '50%',
+                    animation: 'bounce 1s ease-in-out infinite',
+                    '@keyframes bounce': {
+                      '0%, 100%': { transform: 'translateY(0)' },
+                      '50%': { transform: 'translateY(-5px)' },
+                    },
+                  }}>
                     {processingSteps[processingStep]?.icon}
                   </Box>
-                  <Typography variant="h6" color="primary">
+                  <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
                     {processingSteps[processingStep]?.text}
                   </Typography>
                 </Box>
                 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="body2" color="text.secondary">
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
                     Step {processingStep + 1} of {processingSteps.length}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {Math.round(getProcessingProgress())}%
+                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                    {Math.round(getProcessingProgress())}% Complete
                   </Typography>
                 </Box>
                 
-                <LinearProgress 
-                  variant="determinate" 
-                  value={getProcessingProgress()}
-                  sx={{ 
-                    height: 8, 
-                    borderRadius: 4,
-                    '& .MuiLinearProgress-bar': {
+                {/* Enhanced Progress Bar */}
+                <Box sx={{ position: 'relative' }}>
+                  <LinearProgress 
+                    variant="determinate" 
+                    value={getProcessingProgress()}
+                    sx={{ 
+                      height: 8, 
                       borderRadius: 4,
-                      background: 'linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)',
-                    },
-                  }}
-                />
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      '& .MuiLinearProgress-bar': {
+                        borderRadius: 4,
+                        background: 'linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%)',
+                        boxShadow: '0 0 10px rgba(255, 255, 255, 0.5)',
+                      },
+                    }}
+                  />
+                  {/* Progress glow effect */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      height: 8,
+                      width: `${getProcessingProgress()}%`,
+                      borderRadius: 4,
+                      background: 'linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%)',
+                      animation: 'shimmer 2s ease-in-out infinite',
+                      '@keyframes shimmer': {
+                        '0%': { opacity: 0.5 },
+                        '50%': { opacity: 1 },
+                        '100%': { opacity: 0.5 },
+                      },
+                    }}
+                  />
+                </Box>
               </Box>
             </Fade>
 
-            {/* Processing Steps Timeline */}
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle2" gutterBottom align="center">
-                Processing Timeline
-              </Typography>
-              <Grid container spacing={1} justifyContent="center">
-                {processingSteps.map((step, index) => (
-                  <Grid item key={index}>
-                    <Chip
-                      icon={step.icon}
-                      label={`Step ${index + 1}`}
-                      size="small"
-                      color={index <= processingStep ? "primary" : "default"}
-                      variant={index === processingStep ? "filled" : "outlined"}
-                      sx={{
-                        animation: index === processingStep ? 'glow 2s ease-in-out infinite' : 'none',
-                        '@keyframes glow': {
-                          '0%, 100%': { boxShadow: '0 0 5px rgba(25, 118, 210, 0.5)' },
-                          '50%': { boxShadow: '0 0 20px rgba(25, 118, 210, 0.8)' },
-                        },
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-
-            {/* Stats Cards */}
+            {/* Stylized Stats */}
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'primary.light', color: 'white' }}>
-                  <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ 
+                  textAlign: 'center', 
+                  p: 2, 
+                  bgcolor: 'rgba(255, 255, 255, 0.15)', 
+                  borderRadius: 2,
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}>
+                  <Typography variant="h4" sx={{ 
+                    fontWeight: 'bold',
+                    background: 'linear-gradient(45deg, #ffffff 30%, #f0f0f0 90%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}>
                     {uploadedFile ? 1 : 0}
                   </Typography>
-                  <Typography variant="caption">
-                    File Processing
+                  <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                    Document Processing
                   </Typography>
-                </Paper>
+                </Box>
               </Grid>
               
               <Grid item xs={6}>
-                <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'secondary.light', color: 'white' }}>
-                  <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ 
+                  textAlign: 'center', 
+                  p: 2, 
+                  bgcolor: 'rgba(255, 255, 255, 0.15)', 
+                  borderRadius: 2,
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}>
+                  <Typography variant="h4" sx={{ 
+                    fontWeight: 'bold',
+                    background: 'linear-gradient(45deg, #ffffff 30%, #f0f0f0 90%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}>
                     {selectedSchema?.fields?.length || 0}
                   </Typography>
-                  <Typography variant="caption">
+                  <Typography variant="caption" sx={{ opacity: 0.9 }}>
                     Fields Extracting
                   </Typography>
-                </Paper>
+                </Box>
               </Grid>
             </Grid>
           </CardContent>
         </Card>
 
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            Please wait while we process your documents. Do not close this window.
+          <Typography variant="body2" color="text.secondary" sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            gap: 1
+          }}>
+            <Box sx={{ 
+              width: 8, 
+              height: 8, 
+              bgcolor: 'success.main', 
+              borderRadius: '50%',
+              animation: 'blink 1.5s ease-in-out infinite',
+              '@keyframes blink': {
+                '0%, 100%': { opacity: 1 },
+                '50%': { opacity: 0.3 },
+              },
+            }} />
+            Processing in progress - Please keep this window open
           </Typography>
         </Box>
       </Box>
@@ -267,63 +402,25 @@ export default function ProcessingStatus({
         Review your settings and start the data extraction process
       </Typography>
 
-      {/* Processing Summary */}
+      {/* Processing Summary - Compact Cards */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} md={4}>
-          <Card sx={{ height: 200 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <PictureAsPdf color="error" sx={{ mr: 1 }} />
-                <Typography variant="h6">
-                  Uploaded File
-                </Typography>
-              </Box>
-              <Typography variant="h3" color="primary" gutterBottom sx={{ fontWeight: 'bold' }}>
-                {uploadedFile ? 1 : 0}
-              </Typography>
-              <List dense>
-                {uploadedFile && (
-                  <ListItem sx={{ px: 0 }}>
-                    <ListItemIcon sx={{ minWidth: 32 }}>
-                      <CheckCircle color="success" fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary={uploadedFile.original_name}
-                      primaryTypographyProps={{ variant: 'body2', noWrap: true }}
-                    />
-                  </ListItem>
-                )}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card sx={{ height: 200 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Schema color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">
-                  Selected Schema
-                </Typography>
-              </Box>
-              {selectedSchema ? (
-                <>
-                  <Typography variant="h6" color="primary" gutterBottom noWrap>
-                    {selectedSchema.name}
+          <Card sx={{ height: 120, border: '1px solid', borderColor: 'divider' }}>
+            <CardContent sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Uploaded File
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    {selectedSchema.description || 'No description'}
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'bold' }}>
+                    {uploadedFile ? 1 : 0}
                   </Typography>
-                  <Chip 
-                    label={`${selectedSchema.fields?.length || 0} fields`}
-                    color="primary"
-                    size="small"
-                  />
-                </>
-              ) : (
-                <Typography variant="body2" color="error">
-                  No schema selected
+                </Box>
+                <PictureAsPdf color="error" sx={{ fontSize: 40, opacity: 0.7 }} />
+              </Box>
+              {uploadedFile && (
+                <Typography variant="caption" color="text.secondary" noWrap>
+                  {uploadedFile.original_name}
                 </Typography>
               )}
             </CardContent>
@@ -331,19 +428,44 @@ export default function ProcessingStatus({
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Card sx={{ height: 200 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Timer color="action" sx={{ mr: 1 }} />
-                <Typography variant="h6">
-                  Estimated Time
-                </Typography>
+          <Card sx={{ height: 120, border: '1px solid', borderColor: 'divider' }}>
+            <CardContent sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Schema Fields
+                  </Typography>
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'bold' }}>
+                    {selectedSchema?.fields?.length || 0}
+                  </Typography>
+                </Box>
+                <Schema color="primary" sx={{ fontSize: 40, opacity: 0.7 }} />
               </Box>
-              <Typography variant="h3" color="primary" gutterBottom sx={{ fontWeight: 'bold' }}>
-                {uploadedFile ? '2-4' : '0'}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                minutes (approximate)
+              {selectedSchema && (
+                <Typography variant="caption" color="text.secondary" noWrap>
+                  {selectedSchema.name}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: 120, border: '1px solid', borderColor: 'divider' }}>
+            <CardContent sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Est. Time
+                  </Typography>
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'bold' }}>
+                    {uploadedFile ? '2-4' : '0'}
+                  </Typography>
+                </Box>
+                <Timer color="action" sx={{ fontSize: 40, opacity: 0.7 }} />
+              </Box>
+              <Typography variant="caption" color="text.secondary">
+                minutes (approx)
               </Typography>
             </CardContent>
           </Card>
@@ -363,30 +485,29 @@ export default function ProcessingStatus({
         </Alert>
       )}
 
-      {/* Schema Fields Preview */}
+      {/* Schema Fields Preview - Improved Design */}
       {selectedSchema && (
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Fields to Extract
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              The following data will be extracted from each document:
-            </Typography>
-            <Grid container spacing={1}>
-              {selectedSchema.fields?.map((field, index) => (
-                <Grid item key={index}>
-                  <Chip
-                    label={`${field.name} (${field.type})`}
-                    variant="outlined"
-                    size="small"
-                    color={field.required ? "primary" : "default"}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
+        <Paper sx={{ mb: 3, p: 2, border: '1px solid', borderColor: 'divider' }}>
+          <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
+            Fields to Extract ({selectedSchema.fields?.length || 0})
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+            {selectedSchema.fields?.map((field, index) => (
+              <Chip
+                key={index}
+                label={field.name}
+                variant="outlined"
+                size="small"
+                color={field.required ? "primary" : "default"}
+                sx={{ 
+                  fontSize: '0.75rem',
+                  height: 24,
+                  '& .MuiChip-label': { px: 1 }
+                }}
+              />
+            ))}
+          </Box>
+        </Paper>
       )}
 
       {/* Process Button */}
@@ -409,29 +530,6 @@ export default function ProcessingStatus({
         >
           Start Processing
         </Button>
-      </Box>
-
-      {/* Processing Information */}
-      <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          What happens during processing?
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ul style={{ margin: 0, paddingLeft: 20, fontSize: '0.875rem' }}>
-              <li>Direct PDF upload to Gemini AI</li>
-              <li>AI-powered content analysis</li>
-              <li>Field-specific data extraction</li>
-            </ul>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <ul style={{ margin: 0, paddingLeft: 20, fontSize: '0.875rem' }}>
-              <li>Data validation and formatting</li>
-              <li>Results compilation</li>
-              <li>Export preparation</li>
-            </ul>
-          </Grid>
-        </Grid>
       </Box>
     </Box>
   );

@@ -248,20 +248,6 @@ export default function FileUpload({ onUpload, uploadedFile, processing }) {
           {uploading ? 'Uploading...' : 'Upload File'}
         </Button>
       </Box>
-
-      {/* Upload Instructions */}
-      <Box sx={{ mt: 4, p: 3, bgcolor: 'grey.50', borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Upload Guidelines:
-        </Typography>
-        <ul style={{ margin: 0, paddingLeft: 20 }}>
-          <li>Only PDF files are supported</li>
-          <li>Maximum file size: 16MB</li>
-          <li>One file per session</li>
-          <li>Supported documents: Quotations, enquiry forms, manufacturing documents</li>
-          <li>Ensure documents contain clear, readable text</li>
-        </ul>
-      </Box>
     </Box>
   );
 } 

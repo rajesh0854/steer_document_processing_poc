@@ -28,6 +28,12 @@ import {
   Checkbox,
   Alert,
   Divider,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
 } from '@mui/material';
 import {
   Add,
@@ -273,67 +279,77 @@ export default function SchemaManager({ onSchemaSelect, selectedSchema }) {
           </Button>
         </Box>
       ) : (
-        <Grid container spacing={3}>
-          {schemas.map((schema) => (
-            <Grid item xs={12} md={6} lg={4} key={schema.id}>
-              <Card 
-                className="hover-card"
-                sx={{ 
-                  height: '100%',
-                  border: selectedSchema?.id === schema.id ? 2 : 0,
-                  borderColor: 'primary.main',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Schema color="primary" sx={{ mr: 1 }} />
-                    <Typography variant="h6" noWrap>
-                      {schema.name}
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Schema Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell align="center">Fields</TableCell>
+                <TableCell align="center">Created</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {schemas.map((schema) => (
+                <TableRow 
+                  key={schema.id}
+                  sx={{ 
+                    backgroundColor: selectedSchema?.id === schema.id ? 'primary.light' : 'inherit',
+                    '&:hover': { backgroundColor: 'grey.50' }
+                  }}
+                >
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Schema color="primary" sx={{ mr: 1 }} />
+                      <Typography variant="subtitle1" fontWeight="medium">
+                        {schema.name}
+                      </Typography>
+                      {selectedSchema?.id === schema.id && (
+                        <CheckCircle color="success" sx={{ ml: 1 }} />
+                      )}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                      {schema.description || '-'}
                     </Typography>
-                    {selectedSchema?.id === schema.id && (
-                      <CheckCircle color="success" sx={{ ml: 'auto' }} />
-                    )}
-                  </Box>
-                  
-                  {schema.description && (
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      {schema.description}
-                    </Typography>
-                  )}
-
-                  <Box sx={{ mb: 2 }}>
+                  </TableCell>
+                  <TableCell align="center">
                     <Chip
                       label={`${schema.fields?.length || 0} fields`}
                       size="small"
                       color="primary"
                       variant="outlined"
                     />
-                  </Box>
-
-                  <Typography variant="caption" color="text.secondary">
-                    Created: {apiService.formatDate(schema.created_at)}
-                  </Typography>
-                </CardContent>
-
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => handleSelect(schema)}
-                    variant={selectedSchema?.id === schema.id ? "contained" : "outlined"}
-                  >
-                    {selectedSchema?.id === schema.id ? 'Selected' : 'Select'}
-                  </Button>
-                  <IconButton size="small" onClick={() => openEditDialog(schema)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => handleDelete(schema.id)}>
-                    <Delete />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="caption" color="text.secondary">
+                      {apiService.formatDate(schema.created_at)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                      <Button
+                        size="small"
+                        onClick={() => handleSelect(schema)}
+                        variant={selectedSchema?.id === schema.id ? "contained" : "outlined"}
+                      >
+                        {selectedSchema?.id === schema.id ? 'Selected' : 'Select'}
+                      </Button>
+                      <IconButton size="small" onClick={() => openEditDialog(schema)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton size="small" onClick={() => handleDelete(schema.id)}>
+                        <Delete />
+                      </IconButton>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       )}
 
       {/* Create/Edit Schema Dialog */}

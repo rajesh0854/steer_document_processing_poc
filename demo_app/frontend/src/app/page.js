@@ -24,6 +24,7 @@ import {
   GetApp,
   Refresh,
   Description,
+  ArrowBack,
 } from '@mui/icons-material';
 import toast from 'react-hot-toast';
 
@@ -125,6 +126,42 @@ export default function Home() {
     toast.success('Session reset successfully');
   };
 
+  const handleReprocess = async () => {
+    if (!sessionId || !selectedSchema) {
+      toast.error('Cannot re-process: missing session or schema');
+      return;
+    }
+
+    try {
+      setProcessing(true);
+      setActiveStep(2);
+      
+      const response = await apiService.processDocuments(sessionId, selectedSchema.id);
+      
+      setResults(response.results);
+      setResultId(response.result_id);
+      setActiveStep(3);
+      
+      toast.success('Documents re-processed successfully!');
+    } catch (error) {
+      toast.error(error.message || 'Failed to re-process documents');
+      setActiveStep(3);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleGoBack = () => {
+    if (activeStep > 0) {
+      setActiveStep(activeStep - 1);
+      toast.success('Navigated to previous step');
+    }
+  };
+
+  const canGoBack = () => {
+    return activeStep > 0 && !processing;
+  };
+
   const getStepContent = (step) => {
     switch (step) {
       case 0:
@@ -158,6 +195,7 @@ export default function Home() {
             results={results}
             onExport={handleExportResults}
             processing={processing}
+            onReprocess={handleReprocess}
           />
         );
       default:
@@ -185,128 +223,43 @@ export default function Home() {
       </AppBar>
 
       <Container maxWidth={false} sx={{ py: 2, px: 3 }}>
-        <Paper elevation={0} sx={{ p: 3, mb: 3, bgcolor: 'background.paper' }}>
-          <Typography variant="h4" gutterBottom align="center" color="primary">
-            Manufacturing Document Data Extraction
+        <Paper elevation={0} sx={{ p: 2, mb: 2, bgcolor: 'background.paper' }}>
+          <Typography variant="h5" gutterBottom align="center" color="primary">
+            AI Document Processing & Extraction
           </Typography>
-          <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body2" align="center" color="text.secondary">
             Upload your quotation and enquiry PDF, define extraction schema, and get structured data
           </Typography>
+        </Paper>
 
-          <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 3 }}>
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel
-                  StepIconProps={{
-                    style: {
-                      color: index <= activeStep ? '#1976d2' : '#ccc',
-                    },
-                  }}
-                >
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+        {/* Navigation Bar */}
+        <Paper elevation={0} sx={{ p: 2, mb: 2, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Button
+              startIcon={<ArrowBack />}
+              onClick={handleGoBack}
+              disabled={!canGoBack()}
+              variant="outlined"
+              size="small"
+            >
+              Back
+            </Button>
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
+              Step {activeStep + 1} of {steps.length}: {steps[activeStep]}
+            </Typography>
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            {activeStep === 0 && 'Upload your PDF document'}
+            {activeStep === 1 && 'Select or create extraction schema'}
+            {activeStep === 2 && 'Process your document'}
+            {activeStep === 3 && 'Review and export results'}
+          </Typography>
         </Paper>
 
         <Paper elevation={0} sx={{ p: 3, bgcolor: 'background.paper' }}>
           {getStepContent(activeStep)}
         </Paper>
 
-        {/* Action Buttons */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-          <Button
-            disabled={activeStep === 0 || processing}
-            onClick={() => setActiveStep(activeStep - 1)}
-            variant="outlined"
-          >
-            Back
-          </Button>
-          
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {activeStep === 2 && (
-              <Button
-                variant="contained"
-                onClick={handleProcessDocuments}
-                disabled={!sessionId || !selectedSchema || processing}
-                startIcon={processing ? <div className="loading-spinner" /> : <PlayArrow />}
-              >
-                {processing ? 'Processing...' : 'Process Document'}
-              </Button>
-            )}
-            
-            {activeStep === 3 && results && (
-              <Button
-                variant="contained"
-                onClick={handleExportResults}
-                startIcon={<GetApp />}
-                color="secondary"
-              >
-                Export to Excel
-              </Button>
-            )}
-          </Box>
-        </Box>
-
-        {/* Summary Cards */}
-        {(uploadedFile || selectedSchema || results) && (
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            {uploadedFile && (
-              <Grid item xs={12} md={4}>
-                <Card className="hover-card" sx={{ height: 100 }}>
-                  <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Uploaded File
-                    </Typography>
-                    <Typography variant="h4" color="primary">
-                      1
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      PDF document ready
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-            
-            {selectedSchema && (
-              <Grid item xs={12} md={4}>
-                <Card className="hover-card" sx={{ height: 100 }}>
-                  <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Selected Schema
-                    </Typography>
-                    <Typography variant="h6" color="primary" noWrap>
-                      {selectedSchema.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {selectedSchema.fields?.length || 0} fields defined
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-            
-            {results && (
-              <Grid item xs={12} md={4}>
-                <Card className="hover-card" sx={{ height: 100 }}>
-                  <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Processing Results
-                    </Typography>
-                    <Typography variant="h4" color="success.main">
-                      {results.filter(r => r.status === 'success').length}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Successfully processed
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-          </Grid>
-        )}
       </Container>
     </Box>
   );

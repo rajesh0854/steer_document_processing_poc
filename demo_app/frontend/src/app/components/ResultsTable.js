@@ -40,10 +40,11 @@ import {
   Code,
   TableChart,
   ViewModule,
+  Refresh,
 } from '@mui/icons-material';
 import { apiService } from '../services/apiService';
 
-export default function ResultsTable({ results, onExport, processing }) {
+export default function ResultsTable({ results, onExport, processing, onReprocess }) {
   const [editingCell, setEditingCell] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [editableResults, setEditableResults] = useState([]);
@@ -630,60 +631,7 @@ export default function ResultsTable({ results, onExport, processing }) {
         Review and edit the extracted data. Click on any field value to modify it.
       </Typography>
 
-      {/* Statistics Cards - Fixed Height */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={6} md={3}>
-          <Card sx={{ height: 120 }}>
-            <CardContent sx={{ textAlign: 'center', py: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Total Documents
-              </Typography>
-              <Typography variant="h3" color="primary" sx={{ fontWeight: 'bold' }}>
-                {stats.total}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={6} md={3}>
-          <Card sx={{ height: 120 }}>
-            <CardContent sx={{ textAlign: 'center', py: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Successfully Processed
-              </Typography>
-              <Typography variant="h3" color="success.main" sx={{ fontWeight: 'bold' }}>
-                {stats.success}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={6} md={3}>
-          <Card sx={{ height: 120 }}>
-            <CardContent sx={{ textAlign: 'center', py: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Failed
-              </Typography>
-              <Typography variant="h3" color="error.main" sx={{ fontWeight: 'bold' }}>
-                {stats.failed}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={6} md={3}>
-          <Card sx={{ height: 120 }}>
-            <CardContent sx={{ textAlign: 'center', py: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Success Rate
-              </Typography>
-              <Typography variant="h3" color="primary" sx={{ fontWeight: 'bold' }}>
-                {stats.successRate}%
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+
 
       {/* Failed Documents Alert */}
       {stats.failed > 0 && (
@@ -703,7 +651,7 @@ export default function ResultsTable({ results, onExport, processing }) {
         </Alert>
       )}
 
-      {/* View Mode Toggle and Export Button */}
+      {/* View Mode Toggle and Action Buttons */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Tabs value={viewMode} onChange={(e, newValue) => setViewMode(newValue)}>
           <Tab 
@@ -720,17 +668,29 @@ export default function ResultsTable({ results, onExport, processing }) {
           />
         </Tabs>
         
-        {stats.success > 0 && (
-          <Button
-            variant="contained"
-            startIcon={<GetApp />}
-            onClick={onExport}
-            disabled={processing}
-            color="secondary"
-          >
-            Export to Excel
-          </Button>
-        )}
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          {onReprocess && (
+            <Button
+              variant="outlined"
+              startIcon={<Refresh />}
+              onClick={onReprocess}
+              disabled={processing}
+            >
+              Re-process
+            </Button>
+          )}
+          {stats.success > 0 && (
+            <Button
+              variant="contained"
+              startIcon={<GetApp />}
+              onClick={onExport}
+              disabled={processing}
+              color="secondary"
+            >
+              Export to Excel
+            </Button>
+          )}
+        </Box>
       </Box>
 
       {/* Results Display */}
@@ -813,21 +773,6 @@ export default function ResultsTable({ results, onExport, processing }) {
           })}
         </Box>
       )}
-
-      {/* Instructions */}
-      <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          How to use the results:
-        </Typography>
-        <ul style={{ margin: 0, paddingLeft: 20, fontSize: '0.875rem' }}>
-          <li>Switch between Table View and Card View using the tabs above</li>
-          <li>In Table View: Field names are shown vertically, documents horizontally</li>
-          <li>Click on any field value to edit it</li>
-          <li>Use the code icon to view raw extracted data</li>
-          <li>Use the expand icon to view detailed processing information</li>
-          <li>Export the data to Excel for further analysis</li>
-        </ul>
-      </Box>
     </Box>
   );
 } 
